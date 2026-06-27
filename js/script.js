@@ -815,11 +815,7 @@ function saveClassRecord(){
             ?.textContent || 0
         );
 
-    const rate =
-        Number(
-            document.getElementById("rate")
-            ?.textContent || 0
-        );
+    const rate = Math.round((doneCount / 16) * 100);
 
     const record = {
 
