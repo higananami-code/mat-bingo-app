@@ -1,3 +1,4 @@
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyS00omgzqqnVEZJIZ805HdcjcwNBuPJ9GK6dNz6VOkhmZm6abfRIAgGMucUAAR77EvPw/exec";
 function showHome(){
 
 document.body.innerHTML=`
@@ -8,13 +9,11 @@ document.body.innerHTML=`
 
 <h2>マット運動ビンゴ</h2>
 
-<button onclick="showMenu()">
-
+<button onclick="showStudentStart()">
 👦 児童用で始める
-
 </button>
 
-<button onclick="showTeacherLogin()">
+<button onclick="openTeacherPage()">
 
 👨‍🏫 教師用画面
 
@@ -23,6 +22,75 @@ document.body.innerHTML=`
 </div>
 
 `;
+
+}
+function showStudentStart(){
+
+    const name = localStorage.getItem("studentName") || "";
+    const grade = localStorage.getItem("studentGrade") || "";
+    const className = localStorage.getItem("studentClass") || "";
+    const number = localStorage.getItem("studentNumber") || "";
+
+    document.body.innerHTML = `
+
+    <div class="container">
+
+        <h1>👦 児童情報入力</h1>
+
+        <div class="reflectionBox">
+
+            <p>名前</p>
+            <input id="studentName" value="${name}">
+
+            <p>学年</p>
+            <input id="studentGrade" value="${grade}">
+
+            <p>組</p>
+            <input id="studentClass" value="${className}">
+
+            <p>番号</p>
+            <input id="studentNumber" value="${number}">
+
+            <br><br>
+
+            <button onclick="saveStudentAndStart()">
+            保存してスタート
+            </button>
+
+            <button onclick="showHome()">
+            ← ホーム
+            </button>
+
+        </div>
+
+    </div>
+
+    `;
+
+}
+function saveStudentAndStart(){
+
+    localStorage.setItem(
+        "studentName",
+        document.getElementById("studentName").value
+    );
+
+    localStorage.setItem(
+        "studentGrade",
+        document.getElementById("studentGrade").value
+    );
+
+    localStorage.setItem(
+        "studentClass",
+        document.getElementById("studentClass").value
+    );
+
+    localStorage.setItem(
+        "studentNumber",
+        document.getElementById("studentNumber").value
+    );
+
+    showMenu();
 
 }
 function showTeacherLogin(){
@@ -45,10 +113,9 @@ document.body.innerHTML=`
 
 <button onclick="showHome()">
 
-← ホームにもどる
+← ホーム
 
 </button>
-
 </div>
 
 `;
@@ -61,11 +128,26 @@ function checkTeacherPassword(){
 
     if(password === "1234"){
 
+    localStorage.setItem("teacherLogin","true");
+
+    showTeacherDashboard();
+
+}else{
+
+        alert("パスワードがちがいます");
+
+    }
+
+}
+function openTeacherPage(){
+
+    if(localStorage.getItem("teacherLogin") === "true"){
+
         showTeacherDashboard();
 
     }else{
 
-        alert("パスワードがちがいます");
+        showTeacherLogin();
 
     }
 
@@ -84,11 +166,6 @@ document.body.innerHTML=`
 
 </button>
 
-<button onclick="showStudentSetting()">
-
-⚙️ 児童情報設定
-
-</button>
 
 <button onclick="showClassRecords()">
 
@@ -99,6 +176,11 @@ document.body.innerHTML=`
 <button onclick="clearClassRecords()">
 
 🗑️ 学級一覧を削除
+
+</button>
+<button onclick="teacherLogout()">
+
+🚪 ログアウト
 
 </button>
 
@@ -173,7 +255,10 @@ document.body.innerHTML=`
 
 }
 function showLevel1(){
-
+const name = localStorage.getItem("studentName") || "未設定";
+const grade = localStorage.getItem("studentGrade") || "";
+const className = localStorage.getItem("studentClass") || "";
+const number = localStorage.getItem("studentNumber") || "";
 let html=`
 
 <div class="container">
@@ -279,6 +364,7 @@ loadProgress();
 loadReflection();
 
 }
+
 function toggle(cell){
 
     cell.classList.toggle("done");
@@ -512,7 +598,16 @@ function showResult(){
 </button>
 
 <br>
-        <button onclick="showLevel1()">
+${localStorage.getItem("submitted")
+? "<p>✅送信済みです</p>"
+: `<button onclick="sendToSpreadsheet()">
+
+📤 スプレッドシートへ送信
+
+</button>`}
+
+<br>       
+<button onclick="showLevel1()">
 
         ← ビンゴにもどる
 
@@ -523,23 +618,64 @@ function showResult(){
     `;
 
 }
-const name =
-    localStorage.getItem("studentName")
-    || "未設定";
+function sendToSpreadsheet(){
 
-const grade =
-    localStorage.getItem("studentGrade")
-    || "";
+    const progress =
+        JSON.parse(localStorage.getItem("matLevel1")) || [];
 
-const className =
-    localStorage.getItem("studentClass")
-    || "";
+    const score =
+        progress.filter(item => item === true).length;
 
-const number =
-    localStorage.getItem("studentNumber")
-    || "";
+    const lines = [
+        [0,1,2,3],
+        [4,5,6,7],
+        [8,9,10,11],
+        [12,13,14,15],
+        [0,4,8,12],
+        [1,5,9,13],
+        [2,6,10,14],
+        [3,7,11,15],
+        [0,5,10,15],
+        [3,6,9,12]
+    ];
+
+    let bingo = 0;
+
+    lines.forEach(line => {
+        if(line.every(index => progress[index] === true)){
+            bingo++;
+        }
+    });
+
+    const rate = Math.round((score / 16) * 100);
+
+    const data = {
+        date: new Date().toLocaleDateString("ja-JP"),
+        name: localStorage.getItem("studentName") || "",
+        grade: localStorage.getItem("studentGrade") || "",
+        className: localStorage.getItem("studentClass") || "",
+        number: localStorage.getItem("studentNumber") || "",
+        score: score,
+        bingo: bingo,
+        rate: rate,
+        reflection1: localStorage.getItem("reflection1") || "",
+        reflection2: localStorage.getItem("reflection2") || ""
+    };
+
+    fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(data)
+    });
+
+localStorage.setItem("submitted","true");
+
+alert("送信しました！");
+
+showResult();
+
+}
 function showTeacherMode(){
-
 const name = localStorage.getItem("studentName") || "未設定";
 const grade = localStorage.getItem("studentGrade") || "";
 const className = localStorage.getItem("studentClass") || "";
@@ -602,24 +738,20 @@ const today = new Date().toLocaleDateString("ja-JP");
             <p>🎉 ビンゴ：${bingoCount}</p>
 
             <p>📊 達成率：${rate}%</p>
-            <hr>
-
-<h2>📄 CSV用まとめ</h2>
-
-<textarea id="csvText" readonly>
-日付,名前,学年,組,番号,得点,ビンゴ,達成率
-${today},${name},${grade},${className},${number},${doneCount},${bingoCount},${rate}
-</textarea>
-
-<button onclick="copyCsv()">
-📋 コピーする
-<br>
+           
 
 <button onclick="saveClassRecord()">
 
 ➕ 学級記録へ追加
 
 </button>
+
+<br>
+
+<button onclick="showTeacherDashboard()">
+
+← 教師用画面にもどる
+
 </button>
 
             <hr>
@@ -634,28 +766,14 @@ ${today},${name},${grade},${className},${number},${doneCount},${bingoCount},${ra
 
         </div>
 
-        <button onclick="showHome()">
-
-        ← ホームにもどる
-
-        </button>
+               </div>
 
     </div>
 
     `;
 
 }
-function copyCsv(){
 
-    const csvText = document.getElementById("csvText");
-
-    csvText.select();
-
-    document.execCommand("copy");
-
-    alert("コピーしました！");
-
-}
 function saveClassRecord(){
 
     let records =
@@ -663,31 +781,53 @@ function saveClassRecord(){
             localStorage.getItem("classRecords")
         ) || [];
 
-    const csv =
-        document.getElementById("csvText")
-        .value;
+    const today =
+        new Date().toLocaleDateString("ja-JP");
 
-    const lines = csv.split("\n");
+    const name =
+        localStorage.getItem("studentName") || "";
 
-    const values = lines[1].split(",");
+    const grade =
+        localStorage.getItem("studentGrade") || "";
+
+    const className =
+        localStorage.getItem("studentClass") || "";
+
+    const number =
+        localStorage.getItem("studentNumber") || "";
+
+    const doneCount =
+        document.querySelectorAll(".done").length;
+
+    const bingoCount =
+        Number(
+            document.getElementById("bingo")
+            ?.textContent || 0
+        );
+
+    const rate =
+        Number(
+            document.getElementById("rate")
+            ?.textContent || 0
+        );
 
     const record = {
 
-        date: values[0],
+        date: today,
 
-        name: values[1],
+        name: name,
 
-        grade: values[2],
+        grade: grade,
 
-        className: values[3],
+        className: className,
 
-        number: values[4],
+        number: number,
 
-        score: values[5],
+        score: doneCount,
 
-        bingo: values[6],
+        bingo: bingoCount,
 
-        rate: values[7]
+        rate: rate
 
     };
 
@@ -882,11 +1022,11 @@ function showClassRecords(){
 </button>
 
 <br>
-    <button onclick="showHome()">
+    <button onclick="showTeacherDashboard()">
 
-    ← ホーム
+← 教師用画面にもどる
 
-    </button>
+</button>
 
     </div>
 
@@ -957,4 +1097,19 @@ const blob =
     URL.revokeObjectURL(url);
 
 }
+function teacherLogout(){
+
+    const result =
+        confirm("ログアウトしますか？");
+
+    if(result){
+
+        localStorage.removeItem("teacherLogin");
+
+        showHome();
+
+    }
+
+}
+
 showHome();
