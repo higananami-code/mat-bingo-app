@@ -1,4 +1,8 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyS00omgzqqnVEZJIZ805HdcjcwNBuPJ9GK6dNz6VOkhmZm6abfRIAgGMucUAAR77EvPw/exec";
+const GAS_MAIN =
+"https://script.google.com/macros/s/AKfycbyS00omgzqqnVEZJIZ805HdcjcwNBuPJ9GK6dNz6VOkhmZm6abfRIAgGMucUAAR77EvPw/exec";
+
+const GAS_BACKUP =
+"https://script.google.com/macros/s/AKfycbzW0f-MslWzY2a8MBDIUpOPQx7z6fZrnvtxDNjZmnupfhLW3vcgQkGFfk3aSbwvVuL7/exec";
 function showHome(){
 
 document.body.innerHTML=`
@@ -662,11 +666,17 @@ function sendToSpreadsheet(){
         reflection2: localStorage.getItem("reflection2") || ""
     };
 
-    fetch(GAS_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify(data)
-    });
+    fetch(GAS_MAIN, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify(data)
+});
+
+fetch(GAS_BACKUP, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify(data)
+});
 
 localStorage.setItem("submitted","true");
 
