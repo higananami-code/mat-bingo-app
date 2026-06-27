@@ -1,0 +1,287 @@
+body{
+
+    margin:0;
+
+    background:#f3f8ff;
+
+    font-family:"Yu Gothic";
+
+}
+
+.container{
+
+    text-align:center;
+
+    margin-top:120px;
+
+}
+
+h1{
+
+    color:#1e88e5;
+
+    font-size:48px;
+
+}
+
+p{
+
+    font-size:24px;
+
+}
+
+button{
+
+    background:#1e88e5;
+
+    color:white;
+
+    border:none;
+
+    width:280px;
+
+    padding:18px;
+
+    font-size:24px;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    display:block;
+
+    margin:20px auto;
+
+}
+
+button:hover{
+
+    background:#1565c0;
+
+}
+.level{
+
+    display:block;
+
+    margin:20px auto;
+
+    width:250px;
+
+}
+.bingo{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:10px;
+
+max-width:650px;
+
+margin:auto;
+
+margin-top:30px;
+
+}
+
+.cell{
+
+background:white;
+
+border:3px solid #1e88e5;
+
+border-radius:15px;
+
+padding:20px;
+
+font-size:22px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:.3s;
+
+min-height:90px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+text-align:center;
+
+}
+
+.cell:hover{
+
+background:#d8ecff;
+
+}
+
+.done{
+
+background:#43a047;
+
+color:white;
+
+}
+.scoreBox{
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    color:#ff9800;
+
+    margin:20px 0;
+
+}
+.progressOuter{
+    width:80%;
+    max-width:500px;
+    height:24px;
+    background:#ddd;
+    border-radius:20px;
+    margin:10px auto 30px auto;
+    overflow:hidden;
+}
+
+.progressInner{
+    width:0%;
+    height:100%;
+    background:#43a047;
+    transition:.3s;
+}
+.bingo{
+    display:grid;
+    grid-template-columns:repeat(4, 130px);
+    gap:10px;
+    justify-content:center;
+    width:auto;
+    max-width:none;
+}
+
+.cell{
+    width:130px;
+    height:90px;
+    padding:10px;
+    font-size:18px;
+    box-sizing:border-box;
+    word-break:keep-all;
+}
+.resetButton{
+    width:250px;
+    margin-top:25px;
+    margin-bottom:20px;
+}
+.completeMessage{
+    font-size:28px;
+    font-weight:bold;
+    color:#e53935;
+    margin:20px auto;
+    line-height:1.6;
+    animation:pop .5s ease;
+}
+
+@keyframes pop{
+    0%{
+        transform:scale(.8);
+        opacity:0;
+    }
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+.reflectionBox{
+    margin:30px auto;
+    max-width:560px;
+    background:#fff8e1;
+    padding:20px;
+    border-radius:15px;
+}
+
+.reflectionBox textarea{
+    width:90%;
+    height:90px;
+    margin:10px auto;
+    display:block;
+    font-size:18px;
+    padding:10px;
+    border-radius:10px;
+    border:2px solid #ffb300;
+}
+
+#saveMessage{
+    font-weight:bold;
+    color:#43a047;
+    margin-top:10px;
+}
+.resultBox{
+    background:white;
+    max-width:600px;
+    margin:30px auto;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    font-size:22px;
+    line-height:1.8;
+    text-align:left;
+}
+
+.resultBox h2{
+    text-align:center;
+}
+
+.resultBox hr{
+    margin:20px 0;
+}
+@media print {
+
+    button{
+        display:none;
+    }
+
+    body{
+        background:white;
+    }
+
+    .resultBox{
+        box-shadow:none;
+        border:2px solid black;
+    }
+
+}
+.skillCard{
+    background:#e3f2fd;
+    max-width:560px;
+    margin:25px auto;
+    padding:20px;
+    border-radius:15px;
+    border:2px solid #1e88e5;
+    text-align:left;
+    font-size:18px;
+    line-height:1.7;
+}
+
+.skillCard h2{
+    text-align:center;
+    color:#1565c0;
+}
+input{
+    width:250px;
+    height:40px;
+    font-size:20px;
+    margin-bottom:15px;
+    text-align:center;
+}
+#csvText{
+    width:90%;
+    height:80px;
+    font-size:18px;
+    padding:10px;
+    margin:15px auto;
+    display:block;
+}
