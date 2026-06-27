@@ -787,90 +787,65 @@ const today = new Date().toLocaleDateString("ja-JP");
 function saveClassRecord(){
 
     let records =
-        JSON.parse(
-            localStorage.getItem("classRecords")
-        ) || [];
+        JSON.parse(localStorage.getItem("classRecords")) || [];
 
-    const today =
-        new Date().toLocaleDateString("ja-JP");
+    const today = new Date().toLocaleDateString("ja-JP");
 
-    const name =
-        localStorage.getItem("studentName") || "";
-
-    const grade =
-        localStorage.getItem("studentGrade") || "";
-
-    const className =
-        localStorage.getItem("studentClass") || "";
-
-    const number =
-        localStorage.getItem("studentNumber") || "";
+    const name = localStorage.getItem("studentName") || "";
+    const grade = localStorage.getItem("studentGrade") || "";
+    const className = localStorage.getItem("studentClass") || "";
+    const number = localStorage.getItem("studentNumber") || "";
 
     const progress =
-    JSON.parse(
-        localStorage.getItem("matLevel1")
-    ) || [];
+        JSON.parse(localStorage.getItem("matLevel1")) || [];
 
-const doneCount =
-    progress.filter(item => item === true).length;
+    const score =
+        progress.filter(item => item === true).length;
 
-const lines = [
-    [0,1,2,3],
-    [4,5,6,7],
-    [8,9,10,11],
-    [12,13,14,15],
-    [0,4,8,12],
-    [1,5,9,13],
-    [2,6,10,14],
-    [3,7,11,15],
-    [0,5,10,15],
-    [3,6,9,12]
-];
+    const lines = [
+        [0,1,2,3],
+        [4,5,6,7],
+        [8,9,10,11],
+        [12,13,14,15],
+        [0,4,8,12],
+        [1,5,9,13],
+        [2,6,10,14],
+        [3,7,11,15],
+        [0,5,10,15],
+        [3,6,9,12]
+    ];
 
-let bingoCount = 0;
+    let bingo = 0;
 
-lines.forEach(line => {
+    lines.forEach(line => {
+        if(line.every(index => progress[index] === true)){
+            bingo++;
+        }
+    });
 
-    if(line.every(index =>
-        progress[index] === true)){
-        bingoCount++;
-    }
-
-});
-
-const rate =
-    Math.round((doneCount / 16) * 100);
+    const rate = Math.round((score / 16) * 100);
 
     const record = {
-
         date: today,
-
         name: name,
-
         grade: grade,
-
         className: className,
-
         number: number,
-
-        score: doneCount,
-
-        bingo: bingoCount,
-
+        score: score,
+        bingo: bingo,
         rate: rate
-
     };
 
     records.push(record);
 
-    localStorage.setItem(
-        "classRecords",
-        JSON.stringify(records)
-    );
+    localStorage.setItem("classRecords", JSON.stringify(records));
 
     alert("学級記録に追加しました！");
 
+    showClassRecords();
+
 }
+
 function showStudentSetting(){
 
     const name =
@@ -979,9 +954,10 @@ function resetBingo(){
     });
 
 localStorage.removeItem("matLevel1");
+localStorage.removeItem("submitted");
 
-    updateScore();
-    updateBingo();
+updateScore();
+updateBingo();
 
 }
 function showClassRecords(){
@@ -1072,7 +1048,7 @@ function clearClassRecords(){
 
     alert("学級一覧を削除しました！");
 
-    showHome();
+   showTeacherDashboard();
 
 }
 function downloadClassCsv(){
