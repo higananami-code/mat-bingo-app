@@ -214,15 +214,26 @@ document.body.innerHTML=`
 🤸 マット運動
 </button>
 
-<button disabled>🤸‍♂️ 鉄棒</button>
+<button onclick="showComingSoon('鉄棒')">
+🤸‍♂️ 鉄棒（準備中）
+</button>
 
-<button disabled>📦 跳び箱</button>
+<button onclick="showComingSoon('跳び箱')">
+📦 跳び箱（準備中）
+</button>
 
-<button disabled>🏊 水泳</button>
+<button onclick="showComingSoon('水泳')">
+🏊 水泳（準備中）
+</button>
 
 </div>
 
 `;
+
+}
+function showComingSoon(eventName){
+
+    alert(eventName + "は現在準備中です。");
 
 }
 function showMatLevel(){
