@@ -1,5 +1,5 @@
 const GAS_MAIN =
-"https://script.google.com/macros/s/AKfycbyS00omgzqqnVEZJIZ805HdcjcwNBuPJ9GK6dNz6VOkhmZm6abfRIAgGMucUAAR77EvPw/exec";
+"https://script.google.com/macros/s/AKfycbz2H-GGZBwKDG4V90YXM_C44Ac18CIZI87bctmaq7fTnQuseO3aETcuvADQRQKoAt7P/exec";
 
 const GAS_BACKUP =
 "https://script.google.com/macros/s/AKfycbzW0f-MslWzY2a8MBDIUpOPQx7z6fZrnvtxDNjZmnupfhLW3vcgQkGFfk3aSbwvVuL7/exec";
